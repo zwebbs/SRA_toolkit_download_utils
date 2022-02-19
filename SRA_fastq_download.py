@@ -47,12 +47,12 @@ def prefetch_fastq(sra_numbers, download_where=None, extra_args=None):
 def extract_fastq_from_sra(sra_numbers, input_dir=None, output_dir=None, extra_args=None):
     # loop through the SRA numbers and unpack the downloaded FASTQs from their
     # corresponding .sra files. also uses independent subprocess calls
-    outdir = resolve_download_location(output_dir,"-O", "")
+    outdir = resolve_download_location(output_dir,"--outdir", "")
     fasterq_extra_args = resolve_extra_args(extra_args,"")
     for sra_id in sra_numbers:
-        input_path = resolve_extra_args(input_dir, "")
-        sra_filepath = f"{input_path}/{sra_id}.sra" 
-        fasterq_dump_cmd = f"fasterq-dump --outdir {outdir} {fasterq extra_args} {sra_filepath}" 
+        input_path = resolve_extra_args(input_dir, "").strip()
+        sra_filepath = f"{input_path}{sra_id}/{sra_id}.sra" 
+        fasterq_dump_cmd = f"fasterq-dump {outdir} {fasterq_extra_args} {sra_filepath}" 
         print(f"Currently Unpacking: {sra_id}")
         print(f"The Command Was: {fasterq_dump_cmd}")
         subprocess.call(fasterq_dump_cmd, shell=True)
@@ -80,9 +80,9 @@ if __name__ == "__main__":
                     extra_args=args.prefetch_extra_args)
     
     extract_fastq_from_sra(sra_numbers=sra_numbers,
-                            input_dir=download_where,
+                            input_dir=args.prefetch_output_dir,
                             output_dir=args.fasterq_dump_output_dir,
-                            extra_args)
+                            extra_args=args.fasterq_dump_extra_args)
 
 
 
