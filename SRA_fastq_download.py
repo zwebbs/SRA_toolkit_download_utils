@@ -44,19 +44,25 @@ def prefetch_fastq(sra_numbers, download_where=None, extra_args=None):
     return
 
 
+## TODO currently throws an error if the fastq file already exists..
+## solution might take some creativity because I'm not sure how consistently
+## the files will be named here, or how to predict how many sets of files are expected.
 def extract_fastq_from_sra(sra_numbers, input_dir=None, output_dir=None, extra_args=None):
     # loop through the SRA numbers and unpack the downloaded FASTQs from their
     # corresponding .sra files. also uses independent subprocess calls
-    outdir = resolve_download_location(output_dir,"--outdir", "")
+    outdir_flag = resolve_download_location(output_dir,"--outdir", "")
+    outdir = output_dir if output_dir is not None else ""
     fasterq_extra_args = resolve_extra_args(extra_args,"")
     for sra_id in sra_numbers:
         input_path = resolve_extra_args(input_dir, "").strip()
         sra_filepath = f"{input_path}{sra_id}/{sra_id}.sra" 
-        fasterq_dump_cmd = f"fasterq-dump {outdir} {fasterq_extra_args} {sra_filepath}" 
+        fasterq_dump_cmd = f"fasterq-dump {outdir_flag} {fasterq_extra_args} {sra_filepath}" 
+        gzip_fastq_cmd = f"gzip -v {output_dir}*.fastq"
+        extract_cmd = fasterq_dump_cmd + " && " + gzip_fastq_cmd
         print(f"Currently Unpacking: {sra_id}")
-        print(f"The Command Was: {fasterq_dump_cmd}")
-        subprocess.call(fasterq_dump_cmd, shell=True)
-
+        print(f"The Command Was: {extract_cmd}")
+        subprocess.call(extract_cmd, shell=True)
+    
 
 # Main Execution
 #----------------
@@ -79,6 +85,7 @@ if __name__ == "__main__":
                     download_where=args.prefetch_output_dir,
                     extra_args=args.prefetch_extra_args)
     
+    # extract fastq from SRA archive files and gzip
     extract_fastq_from_sra(sra_numbers=sra_numbers,
                             input_dir=args.prefetch_output_dir,
                             output_dir=args.fasterq_dump_output_dir,
