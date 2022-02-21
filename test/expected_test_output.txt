@@ -1,0 +1,29 @@
+.
+├── acc_test.txt
+├── expected_test_output.txt
+├── SRR17999768
+│   └── SRR17999768.sra
+├── SRR17999768_1.fastq.gz
+├── SRR17999768_2.fastq.gz
+├── SRR17999769
+│   └── SRR17999769.sra
+├── SRR17999769_1.fastq.gz
+├── SRR17999769_2.fastq.gz
+├── SRR17999770
+│   └── SRR17999770.sra
+├── SRR17999770_1.fastq.gz
+├── SRR17999770_2.fastq.gz
+├── SRR17999771
+│   └── SRR17999771.sra
+├── SRR17999771_1.fastq.gz
+├── SRR17999771_2.fastq.gz
+├── SRR17999772
+│   └── SRR17999772.sra
+├── SRR17999772_1.fastq.gz
+├── SRR17999772_2.fastq.gz
+├── SRR17999773
+│   └── SRR17999773.sra
+├── SRR17999773_1.fastq.gz
+└── SRR17999773_2.fastq.gz
+
+6 directories, 20 files
